@@ -1,6 +1,6 @@
 {% extends "./base.html" %}
-
 {% block content %}
+
 <ul>
     <hr/>
 
@@ -8,7 +8,8 @@
         {% for post in posts %}
         <li>
             title: <a href="{% url 'detail' post.id %}">{{ post.title }} </a><br/>
-            desc: {{ post.desc }}
+            desc: {{ post.desc }}<br/>
+            time: {{ post.created_time }}
         </li>
         {% endfor %}
         {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">上一页</a>{% endif %}

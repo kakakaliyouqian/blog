@@ -9,9 +9,6 @@ from .models import Post, Tag, Category
 from config.models import SideBar
 from comment.models import Comment
 
-def home(request):
-   
-    return render(request,'home.html',locals())
 
 
 class CommonMixin(object):
@@ -44,11 +41,11 @@ class CommonMixin(object):
         return super(CommonMixin, self).get_context_data(**kwargs)
 
 
-class BasePostsView(CommonMixin, ListView):
+class BasePostsView(CommonMixin,ListView):
     model = Post
     template_name = 'list.html'
     context_object_name = 'posts'
-    paginate_by = 3
+    paginate_by = 11
     allow_empty = True
 
 
@@ -57,26 +54,44 @@ class IndexView(BasePostsView):
 
 
 class CategoryView(BasePostsView):
+    '''
     def get_queryset(self):
         qs = super(CategoryView, self).get_queryset()
         cate_id = self.kwargs.get('category_id')
         qs = qs.filter(category_id=cate_id)
         return qs
-
+        '''
+    def get_queryset(self, **kwargs):
+        # Call the base implementation first to get a context
+        cate_id = self.kwargs.get('category_id')
+        qs = super(CategoryView, self).get_queryset(**kwargs)
+        # Add in a QuerySet of all the books
+        qs = qs.filter(category_id=cate_id)
+        return qs
 
 class TagView(BasePostsView):
+    '''
     def get_queryset(self):
-        tag_id = self.kwargs('tag_id')
+        tag_id = self.kwargs('category_id')
         try:
-            tag = Tag.objects.get(id=tag_id)
+            tag = Tag.objects.get(id=id)
         except Tag.DoesNotExist:
             return []
 
         posts = tag.posts.all()
         return posts
+        '''
+    def get_queryset(self, **kwargs):
+        tag_id = self.kwargs.get('tag_id')
+        try:
+            tag = Tag.objects.get(id=tag_id)
+        except Tag.DoesNotExist:
+            return []
+        posts = tag.posts.all()
+        return posts
 
-
-class PostView(CommonMixin, DetailView):
+class PostView(CommonMixin,DetailView):
     model = Post
     template_name = 'detail.html'
     context_object_name = 'post'
+    

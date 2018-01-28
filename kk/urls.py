@@ -26,11 +26,15 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('cus_admin/', custom_site.urls),
+    path('tag/<int:tag_id>/', TagView.as_view(), name="tag"),
+    path('post/', PostView.as_view(), name="post"),
+    path('category/<int:category_id>/', CategoryView.as_view(), name="category"),
+
     #url(r'^admin/', admin.site.urls),
     #url(r'^cus_admin/', custom_site.urls),
     path('', views.IndexView.as_view(), name='home'),
-    url(r'^category/(?P<category_id>\d+)/', CategoryView.as_view(), name="category"),
-    url(r'^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name="tag"),
+    #url(r'^category/(?P<category_id>\d+)/', CategoryView.as_view(), name="category"),
+    #url(r'^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name="tag"),
     url(r'^post/(?P<pk>\d+)/$', PostView.as_view(), name="detail"),
 
 ]
